@@ -1,5 +1,8 @@
 import argparse
+import math
+
 import numpy as np
+from PyQt6.QtGui.QRawFont import weight
 
 from src.methods.dummy_methods import DummyClassifier
 from src.methods.logistic_regression import LogisticRegression
@@ -9,7 +12,8 @@ from src.utils import normalize_fn, append_bias_term, accuracy_fn, macrof1_fn, m
 import os
 
 np.random.seed(100)
-
+DATASET_N_FEATURES = 13
+DATASET_SIZE = 1600
 
 def main(args):
     """
@@ -43,9 +47,8 @@ def main(args):
 
     ### WRITE YOUR CODE HERE to do any other data processing
     # Initialize the weights
-    weights = np.zeroes(13)
-    ## 3. Initialize the method you want to use.
-
+    weights_logisticRegression = np.zeros((3,DATASET_N_FEATURES)) #initialize first border
+    ## 3. Initialize the method you want to use
     # Follow the "DummyClassifier" example for your methods
     if args.method == "dummy_classifier":
         method_obj = DummyClassifier(arg1=1, arg2=2)
@@ -55,13 +58,49 @@ def main(args):
         pass
 
     elif args.method == "logistic_regression":
+        delta = 1000
+        convergenceTreshold = 0.5 # To be modified later
+        scores = np.zeros((DATASET_SIZE,3))
+        # Addiction level {low, medium, high}
+        while (delta > convergenceTreshold):
+            sum = np.zeros(3)
+            #precompute the sum for each class
+            for classificationClass in range(0,3):
+                for dataPoint in range(0,DATASET_SIZE):
+                    scores[dataPoint][classificationClass] = math.exp(weights_logisticRegression[classificationClass]
+                                                                      @ train_features[dataPoint])
+                    sum[classificationClass] += math.exp(weights_logisticRegression[classificationClass] @ train_features[dataPoint])
+            for classificationClass in range(0,3):
+                for dataPoint in range(0,DATASET_SIZE):
+                    scores[dataPoint][classificationClass] \
+                        = ( scores[dataPoint][classificationClass]/sum[classificationClass])
+            predicted = np.argmax(scores)
+            scores = np.zeros(3)
+            scores[predicted] = 1 #One  hot encoding
 
-        #DO I have to do gradiant descent here ? 
+            #Apply loss function
+            loss = 0
+            for score in scores:
+                for classProbability in range(0,3):
+                    loss += train_labels_classif[]
+
+
+
+            #appliquer la fonction de loss et faire le delta ?
+            #Question à poser:
+            # Quel treshold est ce que je met ?
+            #
+
+
+
+
+
+        #Quel treshold ?
+        #Do I have to do gradiant descent here ?
         #Setup la frontière
         #Evaluer les points avec la frontière selon nos weights actuels.
         #Gradiant descent utiliser la loss pour modifier
         #Boucler sur les features ? Comment récupérer la dimension de nos features ?
-
         ### WRITE YOUR CODE HERE
         pass
 
