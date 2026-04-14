@@ -42,7 +42,8 @@ def main(args):
         pass
 
     ### WRITE YOUR CODE HERE to do any other data processing
-
+    # Initialize the weights
+    weights = np.zeroes(13)
     ## 3. Initialize the method you want to use.
 
     # Follow the "DummyClassifier" example for your methods
@@ -54,6 +55,13 @@ def main(args):
         pass
 
     elif args.method == "logistic_regression":
+
+        #DO I have to do gradiant descent here ? 
+        #Setup la frontière
+        #Evaluer les points avec la frontière selon nos weights actuels.
+        #Gradiant descent utiliser la loss pour modifier
+        #Boucler sur les features ? Comment récupérer la dimension de nos features ?
+
         ### WRITE YOUR CODE HERE
         pass
 
@@ -85,7 +93,8 @@ def main(args):
 
     elif args.task == "regression":
         assert args.method != "logistic_regression", f"You should use logistic regression as a classification method"
-        # Fit the method on training data
+
+
         preds_train = method_obj.fit(train_features, train_labels_reg)
 
         # Predict on unseen data
