@@ -2,7 +2,6 @@ import argparse
 import math
 
 import numpy as np
-from PyQt6.QtGui.QRawFont import weight
 
 from src.methods.dummy_methods import DummyClassifier
 from src.methods.logistic_regression import LogisticRegression
@@ -14,6 +13,8 @@ import os
 np.random.seed(100)
 DATASET_N_FEATURES = 13
 DATASET_SIZE = 1600
+MAX_ITERATION_LOGISTIC_REGRESSION = 10_000_000
+
 
 def main(args):
     """
@@ -58,38 +59,42 @@ def main(args):
         pass
 
     elif args.method == "logistic_regression":
-        delta = 1000
-        convergenceTreshold = 0.5 # To be modified later
-        scores = np.zeros((DATASET_SIZE,3))
+        regression = LogisticRegression(0.1,1000)
+        predictions = regression.fit(train_features,train_labels_classif)
+
+        """
         # Addiction level {low, medium, high}
-        while (delta > convergenceTreshold):
+        while (delta > convergenceTreshold and n_iteration < MAX_ITERATION_LOGISTIC_REGRESSION ):
             sum = np.zeros(3)
             #precompute the sum for each class
-            for classificationClass in range(0,3):
-                for dataPoint in range(0,DATASET_SIZE):
-                    scores[dataPoint][classificationClass] = math.exp(weights_logisticRegression[classificationClass]
-                                                                      @ train_features[dataPoint])
-                    sum[classificationClass] += math.exp(weights_logisticRegression[classificationClass] @ train_features[dataPoint])
-            for classificationClass in range(0,3):
-                for dataPoint in range(0,DATASET_SIZE):
-                    scores[dataPoint][classificationClass] \
-                        = ( scores[dataPoint][classificationClass]/sum[classificationClass])
-            predicted = np.argmax(scores)
-            scores = np.zeros(3)
-            scores[predicted] = 1 #One  hot encoding
 
+            for classificationClass in range(0,3):
+                #Faire le produit matriciel
+                    scores[classificationClass] = math.exp(weights_logisticRegression[classificationClass]
+                                                           @ train_features)
+                    sum[classificationClass] += np.sum(scores[classificationClass])
+            for classificationClass in range(0,3):
+                scores[classificationClass]  = scores[classificationClass] / sum[classificationClass].T
             #Apply loss function
+            #One hot encoding AVANT la loss ou pas ?
+            #Learning rate => tester entre 10-3 et 10 -5 et 5 10-2, faire les tests de mon côté
+            # de même pour le treshold
             loss = 0
-            for score in scores:
-                for classProbability in range(0,3):
-                    loss += train_labels_classif[]
-
+            for i in range(0,DATASET_SIZE):
+                    for classIndex in range(0,3):
+                        loss += train_labels_classif[i,classIndex] * math.log(scores[i,classIndex])
+                        #Quel format pour les weights ?
+                        #Comment est ce que je fais le gradiant
+            #gradiant
+            #Comment est ce que je fais ma loss function
+            for i in range (0,DATASET_SIZE):
+                for classIndex in range(0,3):
 
 
             #appliquer la fonction de loss et faire le delta ?
             #Question à poser:
             # Quel treshold est ce que je met ?
-            #
+
 
 
 
@@ -98,11 +103,12 @@ def main(args):
         #Quel treshold ?
         #Do I have to do gradiant descent here ?
         #Setup la frontière
-        #Evaluer les points avec la frontière selon nos weights actuels.
         #Gradiant descent utiliser la loss pour modifier
         #Boucler sur les features ? Comment récupérer la dimension de nos features ?
         ### WRITE YOUR CODE HERE
         pass
+        """
+
 
     elif args.method == "linear_regression":
         ### WRITE YOUR CODE HERE
