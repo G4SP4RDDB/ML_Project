@@ -61,7 +61,8 @@ def main(args):
     elif args.method == "logistic_regression":
         regression = LogisticRegression(0.1,1000)
         predictions = regression.fit(train_features,train_labels_classif)
-
+        #TODO get dynamquement le truc
+        #
         """
         # Addiction level {low, medium, high}
         while (delta > convergenceTreshold and n_iteration < MAX_ITERATION_LOGISTIC_REGRESSION ):

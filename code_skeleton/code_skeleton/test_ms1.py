@@ -12,7 +12,6 @@ from pathlib import Path
 
 import numpy as np
 
-project_path = Path(r"C:\Users\gaspa\Documents\projetML\code_skeleton\code_skeleton")
 
 class HidePrints:
     """Disable normal printing for calling student code."""
@@ -78,14 +77,13 @@ class TestProject(unittest.TestCase):
         training_data = np.random.rand(N, D)
         training_labels = np.random.randint(0, D, N)
         test_data = np.random.rand(N, D)
-        #with no_print():
+
         pred_labels = method.fit(training_data, training_labels)
         self.assertIsInstance(pred_labels, np.ndarray,
                               f"{name}.{class_name}.fit() should output an array, not {type(pred_labels)}")
         self.assertEqual(pred_labels.shape, training_labels.shape,
                          f"{name}.{class_name}.fit() output has wrong shape ({pred_labels.shape} != {training_labels.shape})")
-        with no_print():
-            pred_labels = method.predict(test_data)
+        pred_labels = method.predict(test_data)
         self.assertIsInstance(pred_labels, np.ndarray,
                               f"{name}.{class_name}.predict() should output an array, not {type(pred_labels)}")
         self.assertEqual(pred_labels.shape, training_labels.shape,
@@ -133,9 +131,11 @@ class TestProject(unittest.TestCase):
         training_labels = (training_data[:, 0] > 0.).astype(int)
         test_data = np.array([-10., -5., -1., 1., 5., 10.])[:, None]
         test_labels = (test_data[:, 0] > 0.).astype(int)
-        with no_print():
-            pred_labels_train = logistic_regression.fit(training_data, training_labels)
-            pred_labels_test = logistic_regression.predict(test_data)
+        pred_labels_train = logistic_regression.fit(training_data, training_labels)
+        print("TRAINIGN DATA SHAPE",training_data.shape)
+        print("TEST_DATA SHAPE", test_data.shape)
+        print(test_data.shape)
+        pred_labels_test = logistic_regression.predict(test_data)
         self.assertTrue((pred_labels_train == training_labels).all(),
                         f"LogisticRegression.fit() is not working on dummy data")
         self.assertTrue((pred_labels_test == test_labels).all(),
@@ -173,7 +173,7 @@ if __name__ == '__main__':
     parser.add_argument('--no-hide', action='store_true', help='Enable printing from the student code')
     args = parser.parse_args()
 
-    project_path = Path(r"C:\Users\gaspa\Documents\projetML")
+    project_path = Path(".")
 
     if args.no_hide:
         no_print = NoHidePrints
