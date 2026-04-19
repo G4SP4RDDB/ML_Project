@@ -55,17 +55,13 @@ def main(args):
         method_obj = DummyClassifier(arg1=1, arg2=2)
 
     elif args.method == "knn":
-        ### WRITE YOUR CODE HERE
-        pass
+        method_obj = KNN()
 
     elif args.method == "logistic_regression":
         method_obj = LogisticRegression(args.lr, args.max_iters)
 
-
-
     elif args.method == "linear_regression":
-        ### WRITE YOUR CODE HERE
-        pass
+        method_obj = LinearRegression()
 
     else:
         raise ValueError(f"Unknown method: {args.method}")
