@@ -59,56 +59,8 @@ def main(args):
         pass
 
     elif args.method == "logistic_regression":
-        regression = LogisticRegression(0.1,1000)
-        predictions = regression.fit(train_features,train_labels_classif)
-        #TODO get dynamquement le truc
-        #
-        """
-        # Addiction level {low, medium, high}
-        while (delta > convergenceTreshold and n_iteration < MAX_ITERATION_LOGISTIC_REGRESSION ):
-            sum = np.zeros(3)
-            #precompute the sum for each class
+        method_obj = LogisticRegression(args.lr, args.max_iters)
 
-            for classificationClass in range(0,3):
-                #Faire le produit matriciel
-                    scores[classificationClass] = math.exp(weights_logisticRegression[classificationClass]
-                                                           @ train_features)
-                    sum[classificationClass] += np.sum(scores[classificationClass])
-            for classificationClass in range(0,3):
-                scores[classificationClass]  = scores[classificationClass] / sum[classificationClass].T
-            #Apply loss function
-            #One hot encoding AVANT la loss ou pas ?
-            #Learning rate => tester entre 10-3 et 10 -5 et 5 10-2, faire les tests de mon côté
-            # de même pour le treshold
-            loss = 0
-            for i in range(0,DATASET_SIZE):
-                    for classIndex in range(0,3):
-                        loss += train_labels_classif[i,classIndex] * math.log(scores[i,classIndex])
-                        #Quel format pour les weights ?
-                        #Comment est ce que je fais le gradiant
-            #gradiant
-            #Comment est ce que je fais ma loss function
-            for i in range (0,DATASET_SIZE):
-                for classIndex in range(0,3):
-
-
-            #appliquer la fonction de loss et faire le delta ?
-            #Question à poser:
-            # Quel treshold est ce que je met ?
-
-
-
-
-
-
-        #Quel treshold ?
-        #Do I have to do gradiant descent here ?
-        #Setup la frontière
-        #Gradiant descent utiliser la loss pour modifier
-        #Boucler sur les features ? Comment récupérer la dimension de nos features ?
-        ### WRITE YOUR CODE HERE
-        pass
-        """
 
 
     elif args.method == "linear_regression":
@@ -188,13 +140,13 @@ if __name__ == "__main__":
     parser.add_argument(
         "--lr",
         type=float,
-        default=1e-5,
+        default=1e-2,
         help="learning rate for methods with learning rate",
     )
     parser.add_argument(
         "--max_iters",
         type=int,
-        default=100,
+        default=800000,
         help="max iters for methods which are iterative",
     )
     parser.add_argument(

@@ -30,7 +30,7 @@ class LogisticRegression(object):
         self.convergence_treshold = 0.1
         self.n_features = 0
         #PARAMETERS
-        self.W = np.ones((self.n_classes,self.n_features))
+        self.W = np.random.rand(self.n_classes,self.n_features)
 
     def fit(self, training_data, training_labels):
         """
@@ -53,8 +53,9 @@ class LogisticRegression(object):
         self.dataSetSize = training_data.shape[0]
         self.n_features = training_data.shape[1]
         self.W = np.ones((self.n_classes,self.n_features))
-        #encoder ce merdier en one hot
-        one_hot = np.eye(self.n_classes)[training_labels]
+
+
+        one_hot = np.eye(self.n_classes)[training_labels.astype(int)]
 
         prediction = np.zeros(training_data.shape[0])
         convergenceTreshold = 0.5  # To be modified later
@@ -64,16 +65,16 @@ class LogisticRegression(object):
             prediction = self.predict(training_data)
             probabilityScores = self.computeSoftmax(training_data)
             loss = 0
-            for i in range(0, self.dataSetSize):
-                    loss -= np.sum(training_labels[i] * math.log(probabilityScores[i,prediction[i]]))
-                    print("LOSS AT STEP",loss)
-            gradiant = (training_data.T @ (probabilityScores - one_hot)).T
+            #for j in range(training_data.shape[0]):
+
+                #for i in range(self.n_classes):
+                  #  loss -= one_hot[j,i] * math.log(probabilityScores[j,i])
+            #print(f"LOSS AT STEP {n_iteration}  {loss}")
+            gradiant = (training_data.T @ (probabilityScores - one_hot)).T / training_data.shape[0]
             new_weights = self.W - self.lr * gradiant
-            delta = np.linalg.norm(gradiant)
-            print(f"WEIGHT EVOLUTION AT STEP {n_iteration} {np.linalg.norm(self.W - new_weights)}")
-            print(f"GRADIANT  {gradiant}")
             self.W = new_weights
             n_iteration +=1
+        print(prediction)
         return prediction
 
     def predict(self, test_data):
@@ -92,6 +93,7 @@ class LogisticRegression(object):
             prediction[i] = (self.W[i].T @ test_data.T).T
         prediction = prediction.T
         prediction = np.argmax(prediction,axis=1)
+        #print(prediction)
         return prediction.T
 
 
@@ -107,10 +109,8 @@ class LogisticRegression(object):
         """
 
         prediction = test_data @ self.W.T
-
-        predScores = np.exp(prediction)
-
-        completeSum = np.sum(predScores, axis=1)
-        predScores = predScores.T / completeSum.T
-
-        return predScores.T
+        predScores = prediction - np.max(prediction, axis = 1, keepdims= True)
+        #print(predScores.shape)
+        predScores = np.exp(predScores)
+        division = predScores.T /np.sum(predScores,axis =1).T
+        return (predScores.T /np.sum(predScores,axis =1).T).T
