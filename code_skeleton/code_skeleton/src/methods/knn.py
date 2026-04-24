@@ -6,7 +6,7 @@ class KNN(object):
     kNN classifier object.
     """
 
-    def __init__(self, k=1, task_kind="classification"):
+    def __init__(self, k=6, task_kind="classification"):
         """
         Call set_arguments function of this class.
         """
